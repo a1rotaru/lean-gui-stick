@@ -25,13 +25,9 @@
     window.i18n.dl = window.i18n.dl || 'ru';
 
     window.i18n.translate = function(json) {
-        if (json.error) {
-            alert(json.error.description);
-        } else {
-            this.source.firstChild.textContent = json.query.results.json.json[0].json.json[0];
-            this.source.className = 'i18n-chunk i18n-translated';
-            this.source = null;
-        }
+        this.source.firstChild.textContent = json[0][0][0];
+        this.source.className = 'i18n-chunk i18n-translated';
+        this.source = null;
     };
 
     ({
@@ -103,9 +99,9 @@
 
             window.i18n.source = source;
 
-            script.src = 'https://query.yahooapis.com/v1/public/yql?q=' + encodeURIComponent(
-                'SELECT * FROM json WHERE url = "https://translate.google.com/translate_a/single?client=gtx&dt=t&sl=' + window.i18n.sl + '&tl=' + window.i18n.dl + '&q=' + encodeURIComponent(source.textContent) + '"'
-            ) + '&format=json&callback=i18n.translate';
+            script.src = 'https://jsonp.afeld.me/?callback=i18n.translate&url=' + encodeURIComponent(
+                'https://translate.google.com/translate_a/single?client=gtx&dt=t&sl=' + window.i18n.sl + '&tl=' + window.i18n.dl + '&q=' + encodeURIComponent(source.textContent)
+            );
 
             document.body.appendChild(script);
         }
